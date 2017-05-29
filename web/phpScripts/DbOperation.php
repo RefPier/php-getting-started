@@ -314,4 +314,64 @@ class DbOperation
         $result = $stmt->get_result();
         return $result; 
 	}
+	
+	public function getGroupUsers ($group_id){
+		$stmt = $this->con->prepare("SELECT facebook_id, name FROM users WHERE group_id = ?  ORDER BY name");
+        $stmt->bind_param("s",$group_id);
+        $stmt->execute(); 
+        $result = $stmt->get_result();
+        return $result; 
+	}
+	
+	public function sumMoney($myfacebook_id, $money){
+		$stmt = $this->con->prepare("UPDATE users SET debit_credit = debit_credit + ? WHERE facebook_id = ?");
+		$stmt->bind_param("ss",$money, $myfacebook_id);
+		if($stmt->execute())
+			return 0;
+		return 1;
+	}
+	
+	public function subtractMoney($hisfacebook_id, $money){
+		$stmt = $this->con->prepare("UPDATE users SET debit_credit = debit_credit - ? WHERE facebook_id = ?");
+		$stmt->bind_param("ss",$money, $hisfacebook_id);
+		if($stmt->execute())
+			return 0;
+		return 1;
+	}
+	
+	public function insertExpense($group_id, $facebook_id, $description, $date, $money){
+		$stmt = $this->con->prepare("INSERT INTO money (group_id, who, buy_date,element, cost) VALUES (?,?,?,?,?)");
+		$stmt->bind_param("sssss",$group_id, $facebook_id,$date, $description, $money);
+		if($stmt->execute())
+			return 0;
+		return 1;
+	}
+	
+	public function countMembers($group_id){
+		$stmt = $this->con->prepare("SELECT facebook_id FROM users WHERE group_id = ?");
+		$stmt->bind_param("s",$group_id);
+		$stmt->execute(); 
+		$stmt->store_result();
+		$numrows = $stmt->num_rows;
+		
+		$stmt->free_result();
+		$stmt->close();
+        return $numrows;
+	}
+	
+	public function updateGroupDebits($group_id,$moneyPerMember){
+		$stmt = $this->con->prepare("UPDATE users SET debit_credit = debit_credit - ? WHERE group_id = ?");
+		$stmt->bind_param("ss",$moneyPerMember, $group_id);
+		if($stmt->execute())
+			return 0;
+		return 1;
+	}
+	
+	public function getGroupExpenses ($group_id) {
+		$stmt = $this->con->prepare("SELECT users.name, money.buy_date, money.element, money.cost  FROM users CROSS JOIN money on users.facebook_id = money.who  WHERE money.group_id = ?  ORDER BY money.buy_date");
+        $stmt->bind_param("s",$group_id);
+        $stmt->execute(); 
+        $result = $stmt->get_result();
+        return $result; 
+	}
 }
