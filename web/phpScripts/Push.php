@@ -7,14 +7,11 @@ class Push {
     //notification message 
     private $message;
  
-    //notification image url 
-    private $image;
  
     //initializing values in this constructor
-    function __construct($title, $message, $image) {
+    function __construct($title, $message) {
          $this->title = $title;
          $this->message = $message; 
-         $this->image = $image; 
     }
     
     //getting the push notification
@@ -22,7 +19,6 @@ class Push {
         $res = array();
         $res['data']['title'] = $this->title;
         $res['data']['message'] = $this->message;
-        $res['data']['image'] = $this->image;
         return $res;
     }
  

@@ -3,6 +3,7 @@
  $response = array(); 
  
  if($_SERVER['REQUEST_METHOD']=='POST'){
+	 $response['users'] = array();
  
 	 $group_id = isset($_POST['group_id']) ? $_POST['group_id'] : '';
 	 $facebook_id = isset($_POST['facebook_id']) ? $_POST['facebook_id'] : '';
@@ -15,6 +16,7 @@
 	 
 	 
 	 $memberCount = $db->countMembers($group_id);
+	 $users = $db->getGroupUsers ($group_id);
 	
 	 
 	 if($memberCount == 0){
@@ -24,6 +26,13 @@
 	 $updateAll = $db->updateGroupDebits($group_id,$moneyPerMember);
 	 	 
 	 $updateMe = $db->sumMoney($facebook_id, $money);
+	 
+	 
+	 while($user = $users->fetch_assoc()){
+		 $temp = array();
+		 $temp['facebook_id']=$user['facebook_id'];
+		 array_push($response['users'],$temp);
+		 }
  
  	if($result == 0){
 		 $response['error'] = false; 
