@@ -27,7 +27,7 @@ class DbOperation
             if($stmt->execute())
                 return 0; //return 0 means success
             return 1; //return 1 means failure
-        }else if(($this->isFBIDExist($facebook_id)) && ($this->isFirebaseTKempty($facebook_id))){
+        }else if($this->isFBIDExist($facebook_id)){
 			$stmt = $this->con->prepare("UPDATE users SET firebase_token= ? WHERE facebook_id = ?");
             $stmt->bind_param("ss", $firebase_token, $facebook_id);
             if($stmt->execute())
