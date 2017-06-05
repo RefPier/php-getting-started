@@ -203,6 +203,13 @@ class DbOperation
         return $num_rows > 0;
     }
     
+    public function searchDebit($facebook_id){
+		$stmt = $this->con->prepare("SELECT debit_credit FROM users WHERE facebook_id = ?");
+        $stmt->bind_param("s",$facebook_id);
+        $stmt->execute(); 
+        $result = $stmt->get_result();
+        return $result; 
+	}
     
     public function searchAllGroupEvents ($group_id,$date){
 		$stmt = $this->con->prepare("SELECT event_date, event_hour, description FROM group_events WHERE group_id = ? AND event_date >= ? ORDER BY event_date, event_hour");

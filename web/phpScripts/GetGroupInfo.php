@@ -9,6 +9,7 @@
 	 $response['error'] = false; 
 
 	 $response['events_descriptions'] = array(); 
+	 $response['debits'] = array();
 	 $response['clean_descriptions'] = array(); 
 	 
 	 $facebook_id = isset($_POST['facebook_id']) ? $_POST['facebook_id'] : '';
@@ -18,6 +19,7 @@
 	 $db = new DbOperation();
 	 
 	 $events = $db->searchTodayEvents($group_id,$date);
+	 $debits = $db->searchDebit($facebook_id);
 	 $cleanDates = $db->searchCleaningRound($facebook_id);
 	 
 	 $c = 0;
@@ -32,6 +34,12 @@
 		 }
 		
 	 $response['numberOfEvents'] = $c;
+	 
+	 while($debit = $debits->fetch_assoc()){
+		 $temp = array();
+		 $temp['debit_credit']=$debit['debit_credit'];
+		 array_push($response['debits'],$temp);
+		 }
 	 
 	 while($cleanDate = $cleanDates->fetch_assoc()){
 		 $i++;
