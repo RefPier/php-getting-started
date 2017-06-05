@@ -16,7 +16,10 @@
  	}elseif($result == 2){
 		 $response['error'] = true; 
 		 $response['message'] = 'User not found';
-	 }else{
+	 }else if($result == 3){
+		 $response['error'] = true; 
+		 $response['message'] = 'Group does not exists';
+	 } else{
 		 $response['error'] = true;
 		 $response['message']='Error';
 	 }

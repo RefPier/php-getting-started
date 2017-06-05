@@ -165,18 +165,33 @@ class DbOperation
         }
 	}
 	
+	
+	
 	public function insertInExistingGroup($facebook_id,$group_id){
 		if($this->isFBIDExist($facebook_id)){
-			$stmt = $this->con->prepare("UPDATE users SET group_id= ? WHERE facebook_id = ?");
-            $stmt->bind_param("ss",$group_id,$facebook_id);
-            if($stmt->execute())
-				return 0;
-			return 1; //return 1 means failure
+			if($this->isGroupExists($group_id)){
+				$stmt = $this->con->prepare("UPDATE users SET group_id = ? WHERE facebook_id = ?");
+				$stmt->bind_param("ss",$group_id,$facebook_id);
+				if($stmt->execute())
+					return 0;
+				return 1; //return 1 means failure
+			}else{
+				return 3;
+			}
         }else{
             return 2; //returning 2 means facebook_id doesn't exists
         }
 	}
-        
+	
+	private function isGroupExists($group_id){
+		$stmt = $this->con->prepare("SELECT ID FROM groups WHERE ID = ?");
+		$stmt->bind_param("s",$group_id);
+		$stmt->execute();
+        $stmt->store_result();
+        $num_rows = $stmt->num_rows;
+        $stmt->close();
+        return $num_rows > 0;
+	}
         //the method will check if facebook_id already exist 
     private function isFBIDexist($facebook_id){
         $stmt = $this->con->prepare("SELECT facebook_id FROM users WHERE facebook_id = ?");
