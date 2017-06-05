@@ -52,7 +52,17 @@ class DbOperation
         }
     }
  
-    
+    public function storeToken($facebook_id, $firebase_token){
+		if($this->isFBIDExist($facebook_id)){
+            $stmt = $this->con->prepare("UPDATE users SET firebase_token=? WHERE facebook_id = ?");
+            $stmt->bind_param("ss", $firebase_token, $facebook_id);
+            if($stmt->execute())
+                return 0; //return 0 means success
+            return 1; //return 1 means failure
+        }else{
+            return 2; //returning 2 means facebook id doesn't exists
+        }
+	}
 
     //the method will check if a row has a facebook_id but no firebase_token 
     private function isFirebaseTKempty($facebook_id){
