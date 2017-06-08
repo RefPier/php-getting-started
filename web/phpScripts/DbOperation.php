@@ -331,16 +331,16 @@ class DbOperation
 		return 1;
 	}
 	
-	public function removeContactsNumber($group_id, $contact_name, $contact_number){
-		$stmt = $this->con->prepare("DELETE FROM contacts_numbers WHERE group_id=? AND contact_name=? AND contact_number=?");
-		$stmt->bind_param("sss",$group_id, $contact_name, $contact_number);
+	public function removeContactsNumber($id){
+		$stmt = $this->con->prepare("DELETE FROM contacts_numbers WHERE ID=?");
+		$stmt->bind_param("s",$id);
 		if($stmt->execute())
 			return 0;
 		return 1;
 	}
 	
 	public function getGroupContacts ($group_id){
-		$stmt = $this->con->prepare("SELECT contact_name, contact_number FROM contacts_numbers WHERE group_id = ?  ORDER BY contact_name");
+		$stmt = $this->con->prepare("SELECT ID, contact_name, contact_number FROM contacts_numbers WHERE group_id = ?  ORDER BY contact_name");
         $stmt->bind_param("s",$group_id);
         $stmt->execute(); 
         $result = $stmt->get_result();

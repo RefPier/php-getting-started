@@ -7,13 +7,11 @@ require_once 'DbOperation.php';
  
  if($_SERVER['REQUEST_METHOD']=='POST'){
  
-	 $group_id = isset($_POST['group_id']) ? $_POST['group_id'] : '';
-	 $contact_name = isset($_POST['contact_name']) ? $_POST['contact_name'] : '';
-	 $contact_number = isset($_POST['contact_number']) ? $_POST['contact_number'] : '';
+	 $id = isset($_POST['id']) ? $_POST['id'] : '';
 	 
 	 $db = new DbOperation(); 
 	 
-	 $result = $db->removeContactsNumber($group_id, $contact_name, $contact_number);
+	 $result = $db->removeContactsNumber($id);
 	 
 	 if($result == 0){
 		 $response['error'] = false; 

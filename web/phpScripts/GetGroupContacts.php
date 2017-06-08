@@ -21,6 +21,7 @@
 	 while($contact = $contacts->fetch_assoc()){
 		 $c++;
 		 $temp = array();
+		 $temp['id']=$contact['ID'];
 		 $temp['contact_name']=$contact['contact_name'];
 		 $temp['contact_number']=$contact['contact_number'];
 		 array_push($response['contacts'],$temp);
