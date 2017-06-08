@@ -212,7 +212,7 @@ class DbOperation
 	}
     
     public function searchAllGroupEvents ($group_id,$date){
-		$stmt = $this->con->prepare("SELECT event_date, event_hour, description FROM group_events WHERE group_id = ? AND event_date >= ? ORDER BY event_date, event_hour");
+		$stmt = $this->con->prepare("SELECT ID, event_date, event_hour, description FROM group_events WHERE group_id = ? AND event_date >= ? ORDER BY event_date, event_hour");
         $stmt->bind_param("ss",$group_id,$date);
         $stmt->execute(); 
         $result = $stmt->get_result();
@@ -230,6 +230,14 @@ class DbOperation
 	public function insertEvent($group_id, $date, $hour, $description){
 		$stmt = $this->con->prepare("INSERT INTO group_events (group_id, event_date, event_hour, description) VALUES (?,?,?,?)");
 		$stmt->bind_param("ssss",$group_id, $date, $hour, $description);
+		if($stmt->execute())
+			return 0;
+		return 1;
+	}
+	
+	public function removeEvent($id){
+		$stmt = $this->con->prepare("DELETE FROM group_events WHERE ID=?");
+		$stmt->bind_param("s",$id);
 		if($stmt->execute())
 			return 0;
 		return 1;

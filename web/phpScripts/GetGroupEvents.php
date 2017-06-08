@@ -22,6 +22,8 @@
 	 while($event = $events->fetch_assoc()){
 		 $c++;
 		 $temp = array();
+		 
+		 $temp['id']=$event['ID'];
 		 $temp['description']=$event['description'];
 		 $temp['event_date']=$event['event_date'];
 		 $temp['event_hour']=$event['event_hour'];
